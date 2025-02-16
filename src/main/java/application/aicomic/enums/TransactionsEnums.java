@@ -4,7 +4,8 @@ public enum TransactionsEnums {
     CANCELED((byte) 1),
     NOT_PAID((byte) 2),
     PROCESSING((byte) 3),
-    PAID((byte) 4);
+    PAID((byte) 4),
+    FAILED((byte) 5);
 
     private final byte value;
 

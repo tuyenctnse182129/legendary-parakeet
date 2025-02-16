@@ -14,24 +14,26 @@ import java.util.List;
 public class CommentsController {
     private  CommentsService commentsService;
 
-    @GetMapping
+    @GetMapping("/getAll")
     public List<Comments> getAllComments() {
         return commentsService.getAllComments();
     }
-    @PostMapping
+
+    @PostMapping("/post")
     public Comments addComment(@RequestBody Comments comments) {
         return commentsService.addComment(comments);
     }
 
-    @PutMapping("/{update}")
+    @PutMapping("/update")
     public Comments updateComment(@PathVariable String id, @RequestBody CommentsDTO commentsDTO) {
         return commentsService.updateComment(id, commentsDTO);
     }
-    @GetMapping("/{getById}")
+    @GetMapping("/getById")
     public Comments getCommentById(@PathVariable String id) {
         return commentsService.getCommentById(id);
     }
-    @DeleteMapping("/{delete}")
+
+    @DeleteMapping("/delete")
     public Comments deleteComment(@PathVariable String id) {
         return commentsService.deleteComment(id);
     }

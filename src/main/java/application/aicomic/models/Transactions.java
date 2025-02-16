@@ -4,6 +4,7 @@ import application.aicomic.enums.TransactionsEnums;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import org.checkerframework.common.aliasing.qual.Unique;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
 
 import java.time.LocalDateTime;
@@ -16,6 +17,16 @@ public class Transactions {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "transaction_id", length = 50)
     private String transactionId;
+
+    @Unique
+    @Column(name = "transaction_code", length = 50)
+    private String transactionCode;
+
+    @Column(name = "content", length = 255)
+    private String content;
+
+    @Column(name = "bank_name", length = 50)
+    private String bankName;
 
     @Column(name = "transaction_time")
     private LocalDateTime transactionTime;

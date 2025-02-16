@@ -7,6 +7,9 @@ import java.time.LocalDateTime;
 @Data
 public class TransactionsDTO {
     private String transactionId;
+    private String transactionCode;
+    private String content;
+    private String bankName;
     private LocalDateTime transactionTime;
     private double amount;
     private byte status;

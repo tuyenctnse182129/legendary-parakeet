@@ -17,26 +17,35 @@ public class SecurityConfig {
     }
 
     @Bean
+
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/users/login", "/users/logout", // Các endpoint API cần mở
-                                "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/v3/api-docs.yaml", // Swagger UI
-                                "/webjars/**", "/swagger-resources/**" ).permitAll()
-                        .anyRequest().authenticated()
-                )
-                .oauth2Login(oauth2 -> oauth2 //
-                        .loginPage("/oauth2/authorization/google") // Tùy chỉnh trang login
-                )
-                .logout(logout -> logout
-                        .logoutSuccessHandler(oidcLogoutSuccessHandler()) // Xử lý logout với OAuth2
-                        .invalidateHttpSession(true)
-                        .deleteCookies("JSESSIONID")
-                )
+                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll()) // Mở toàn bộ API
                 .csrf(csrf -> csrf.disable());
 
         return http.build();
     }
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//        http
+//                .authorizeHttpRequests(auth -> auth
+//                        .requestMatchers("/users/login", "/users/logout", // Các endpoint API cần mở
+//                                "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/v3/api-docs.yaml", // Swagger UI
+//                                "/webjars/**", "/swagger-resources/**" ).permitAll()
+//                        .anyRequest().authenticated()
+//                )
+//                .oauth2Login(oauth2 -> oauth2 //
+//                        .loginPage("/oauth2/authorization/google") // Tùy chỉnh trang login
+//                )
+//                .logout(logout -> logout
+//                        .logoutSuccessHandler(oidcLogoutSuccessHandler()) // Xử lý logout với OAuth2
+//                        .invalidateHttpSession(true)
+//                        .deleteCookies("JSESSIONID")
+//                )
+//                .csrf(csrf -> csrf.disable());
+//
+//        return http.build();
+//    }
 
     /**
      * Xử lý logout thành công cho OIDC

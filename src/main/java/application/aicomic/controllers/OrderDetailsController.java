@@ -14,20 +14,22 @@ import java.util.List;
 public class OrderDetailsController {
     private OrderDetailsService orderDetailsService;
 
-    @GetMapping
+    @GetMapping("/getAll")
     public List<OrderDetails> getAllOrderDetails() {
         return orderDetailsService.getAllOrderDetails();
     }
-    @PostMapping
+
+    @PostMapping("/post")
     public OrderDetails addOrderDetail(@RequestBody OrderDetails orderDetails) {
         return orderDetailsService.addOrderDetail(orderDetails);
     }
 
-    @PutMapping("/{update}")
+    @PutMapping("/update")
     public OrderDetails updateOrderDetail(@PathVariable String id, @RequestBody OrderDetailsDTO orderDetailsDTO) {
         return orderDetailsService.updateOrderDetail(id, orderDetailsDTO);
     }
-    @GetMapping("/{getById}")
+
+    @GetMapping("/getById")
     public OrderDetails getOrderDetailById(@PathVariable String id) {
         return orderDetailsService.getOrderDetailById(id);
     }

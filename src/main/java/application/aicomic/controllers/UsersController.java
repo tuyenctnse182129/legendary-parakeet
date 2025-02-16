@@ -25,7 +25,7 @@ public class UsersController {
         return usersService.getAllUsers();
     }
 
-    @GetMapping("/{getId}")
+    @GetMapping("/{userId}")
     public Users getUserById(@PathVariable String userId) {
         return usersService.getUserById(userId);
     }
@@ -35,10 +35,16 @@ public class UsersController {
         return usersService.saveUser(user);
     }
 
-    @DeleteMapping("/{deleteId}")
+    @DeleteMapping("/{userId}")
     public void deleteUser(@PathVariable String userId) {
         usersService.deleteUser(userId);
     }
+
+    @PostMapping("/add-list-user")
+    public List<Users> addListUser(@RequestBody List<Users> users){
+        return usersService.addListOfUsers(users);
+    }
+
 
     @GetMapping("/login")
     public Users getUserInfo(@AuthenticationPrincipal OAuth2User principal) {

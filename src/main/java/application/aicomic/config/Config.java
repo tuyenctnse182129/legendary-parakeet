@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -16,6 +17,8 @@ public class Config {
     public static String vnp_TmnCode = "H4IBZY7B";
     public static String secretKey = "SJF8M4GRVTN6245GQSTGDNTVB7Q313U4";
     public static String vnp_ApiUrl = "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction";
+
+    public static String vnp_ReturnUrl = "http://localhost:8080/transaction/return";
 
     public static String md5(String message) {
         String digest = null;
@@ -53,26 +56,61 @@ public class Config {
         return digest;
     }
 
-    //Util for VNPAY
-    public static String hashAllFields(Map fields) {
-        List fieldNames = new ArrayList(fields.keySet());
+//    //Util for VNPAY
+//    public static String hashAllFields(Map fields) {
+//        List fieldNames = new ArrayList(fields.keySet());
+//        Collections.sort(fieldNames);
+//        StringBuilder sb = new StringBuilder();
+//        Iterator itr = fieldNames.iterator();
+//        while (itr.hasNext()) {
+//            String fieldName = (String) itr.next();
+//            String fieldValue = (String) fields.get(fieldName);
+//            if ((fieldValue != null) && (fieldValue.length() > 0)) {
+//                sb.append(fieldName);
+//                sb.append("=");
+//                sb.append(fieldValue);
+//            }
+//            if (itr.hasNext()) {
+//                sb.append("&");
+//            }
+//        }
+//        return hmacSHA512(secretKey,sb.toString());
+//    }
+
+    public static String hashAllFields(Map<String, String> fields) throws Exception {
+        List<String> fieldNames = new ArrayList<>(fields.keySet());
         Collections.sort(fieldNames);
-        StringBuilder sb = new StringBuilder();
-        Iterator itr = fieldNames.iterator();
-        while (itr.hasNext()) {
-            String fieldName = (String) itr.next();
-            String fieldValue = (String) fields.get(fieldName);
-            if ((fieldValue != null) && (fieldValue.length() > 0)) {
-                sb.append(fieldName);
-                sb.append("=");
-                sb.append(fieldValue);
-            }
-            if (itr.hasNext()) {
-                sb.append("&");
+
+        StringBuilder hashData = new StringBuilder();
+        for (String fieldName : fieldNames) {
+            if (!fieldName.equals("vnp_SecureHash") && !fieldName.equals("vnp_SecureHashType")) {
+                String fieldValue = fields.get(fieldName);
+                if (fieldValue != null && !fieldValue.isEmpty()) {
+                    if (hashData.length() > 0) {
+                        hashData.append("&");
+                    }
+                    hashData.append(fieldName).append("=").append(URLEncoder.encode(fieldValue, StandardCharsets.UTF_8));
+                }
             }
         }
-        return hmacSHA512(secretKey,sb.toString());
+
+        String vnp_HashSecret = "SJF8M4GRVTN6245GQSTGDNTVB7Q313U4"; // Thay bằng VNPAY secret key của bạn
+        Mac sha512_HMAC = Mac.getInstance("HmacSHA512");
+        SecretKeySpec secret_key = new SecretKeySpec(vnp_HashSecret.getBytes(StandardCharsets.UTF_8), "HmacSHA512");
+        sha512_HMAC.init(secret_key);
+
+        byte[] hmacBytes = sha512_HMAC.doFinal(hashData.toString().getBytes(StandardCharsets.UTF_8));
+        return bytesToHex(hmacBytes);
     }
+
+    private static String bytesToHex(byte[] bytes) {
+        StringBuilder result = new StringBuilder();
+        for (byte b : bytes) {
+            result.append(String.format("%02x", b));
+        }
+        return result.toString();
+    }
+
 
     public static String hmacSHA512(final String key, final String data) {
         try {

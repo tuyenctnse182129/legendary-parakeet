@@ -11,24 +11,28 @@ import java.util.List;
 @RestController
 public class CurrentChapterController {
     private CurrentChapterService currentChapterService;
-    @GetMapping
+
+    @GetMapping("/getAll")
     public List<CurrentChapter> getAllCurrentChapter() {
         return currentChapterService.getAllCurrentChapter();
     }
-    @PostMapping
+
+    @PostMapping("/post")
     public CurrentChapter addCurrentChapter(@RequestBody CurrentChapter currentChapter) {
         return currentChapterService.addCurrentChapter(currentChapter);
     }
 
-    @PutMapping("/{update}")
+    @PutMapping("/update")
     public CurrentChapter updateCurrentChapter(@PathVariable String id, @RequestBody CurrentChapterDTO currentChapterDTO) {
         return currentChapterService.updateCurrentChapter(id, currentChapterDTO);
     }
-    @GetMapping("/{getById}")
+
+    @GetMapping("/getById")
     public CurrentChapter getCurrentChapterById(@PathVariable String id) {
         return currentChapterService.getCurrentChapterById(id);
     }
-    @DeleteMapping("/{delete}")
+
+    @DeleteMapping("/delete")
     public CurrentChapter deleteCurrentChapter(@PathVariable String id) {
         return currentChapterService.deleteCurrentChapter(id);
     }

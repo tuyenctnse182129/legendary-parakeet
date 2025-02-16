@@ -1,6 +1,7 @@
 package application.aicomic.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.util.List;
@@ -19,6 +20,10 @@ public class Genres {
 
     @Column(name = "genres_description", length = 250)
     private String genresDescription;
+
+    @NotNull
+    @Column(name = "status")
+    private byte status;
 
     @ManyToMany
     @JoinTable(
